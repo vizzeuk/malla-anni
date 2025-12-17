@@ -38,12 +38,12 @@ export default function MallaCurricular() {
       const { data: statusData } = await supabase
         .from('subject_status')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', user.id) as any
 
       const { data: gradesData } = await supabase
         .from('grades')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', user.id) as any
 
       // Combinar datos
       const subjectsWithStatus: SubjectWithStatus[] = NURSING_SUBJECTS.map(subject => {
@@ -86,7 +86,7 @@ export default function MallaCurricular() {
           updated_at: new Date().toISOString()
         }, {
           onConflict: 'user_id,subject_id'
-        })
+        }) as any
 
       if (error) throw error
       await loadSubjects()
@@ -121,7 +121,7 @@ export default function MallaCurricular() {
               grade: g.grade,
               percentage: g.percentage
             }))
-          )
+          ) as any
 
         if (error) throw error
       }
@@ -157,7 +157,7 @@ export default function MallaCurricular() {
         .from('subject_status')
         .upsert(updates, {
           onConflict: 'user_id,subject_id'
-        })
+        }) as any
 
       if (error) throw error
       
