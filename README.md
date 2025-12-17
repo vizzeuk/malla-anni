@@ -100,6 +100,7 @@ CREATE POLICY "Users can delete their own grades" ON grades
 ```
 
 4. Copia el archivo `.env.example` a `.env`:
+
 ```bash
 cp .env.example .env
 ```

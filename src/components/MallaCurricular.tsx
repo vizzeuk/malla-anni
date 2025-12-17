@@ -47,14 +47,14 @@ export default function MallaCurricular() {
 
       // Combinar datos
       const subjectsWithStatus: SubjectWithStatus[] = NURSING_SUBJECTS.map(subject => {
-        const status = statusData?.find(s => s.subject_id === subject.id)
-        const subjectGrades = gradesData?.filter(g => g.subject_id === subject.id) || []
+        const status = statusData?.find((s: any) => s.subject_id === subject.id)
+        const subjectGrades = gradesData?.filter((g: any) => g.subject_id === subject.id) || []
 
         return {
           ...subject,
           status: status?.status || 'pending',
           finalGrade: status?.final_grade || null,
-          grades: subjectGrades.map(g => ({
+          grades: subjectGrades.map((g: any) => ({
             id: g.id,
             name: g.name,
             grade: g.grade,
@@ -77,6 +77,7 @@ export default function MallaCurricular() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
 
+      // @ts-ignore
       const { error } = await supabase
         .from('subject_status')
         .upsert({
@@ -86,7 +87,7 @@ export default function MallaCurricular() {
           updated_at: new Date().toISOString()
         }, {
           onConflict: 'user_id,subject_id'
-        }) as any
+        })
 
       if (error) throw error
       await loadSubjects()
@@ -111,6 +112,7 @@ export default function MallaCurricular() {
 
       // Insertar nuevas notas
       if (grades.length > 0) {
+        // @ts-ignore
         const { error } = await supabase
           .from('grades')
           .insert(
@@ -121,7 +123,7 @@ export default function MallaCurricular() {
               grade: g.grade,
               percentage: g.percentage
             }))
-          ) as any
+          )
 
         if (error) throw error
       }
@@ -153,11 +155,12 @@ export default function MallaCurricular() {
         updated_at: new Date().toISOString()
       }))
 
+      // @ts-ignore
       const { error } = await supabase
         .from('subject_status')
         .upsert(updates, {
           onConflict: 'user_id,subject_id'
-        }) as any
+        })
 
       if (error) throw error
       
